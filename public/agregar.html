@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Libro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header><h1>Ingresar Libro</h1></header>
+    <form id="form-agregar">
+        <label for="id">ID del Libro:</label>
+        <input type="text" id="id" name="id" required><br><br>
+
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo" required><br><br>
+
+        <label for="autor">Autor:</label>
+        <input type="text" id="autor" name="autor" required><br><br>
+
+        <label for="genero">Género:</label>
+        <input type="text" id="genero" name="genero"><br><br>
+
+        <button type="submit">Agregar Libro</button>
+    </form>
+
+    <script>
+        document.getElementById('form-agregar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                id: document.getElementById('id').value,
+                titulo: document.getElementById('titulo').value,
+                autor: document.getElementById('autor').value,
+                genero: document.getElementById('genero').value
+            };
+
+            try {
+                const response = await fetch('/api/libros', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Libro agregado exitosamente');
+                    document.getElementById('form-agregar').reset();
+                } else {
+                    const error = await response.json();
+                    alert('Error al agregar el libro: ' + (error.message || 'Desconocido'));
+                }
+            } catch (err) {
+                alert('Error al agregar el libro: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>

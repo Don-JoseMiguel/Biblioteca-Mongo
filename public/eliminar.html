@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Libro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Eliminar Libro</h1>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <form id="deleteForm">
+                <label for="bookId">ID del Libro:</label>
+                <input type="text" id="bookId" name="bookId" required placeholder="Introduce el ID del libro">
+                <button type="submit">Eliminar Libro</button>
+            </form>
+            <p id="responseMessage"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Gestión de Libros &copy; 2025</p>
+    </footer>
+
+    <script>
+        // Manejador del formulario
+        document.getElementById('deleteForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevenir el envío del formulario
+            const bookId = document.getElementById('bookId').value;
+
+            try {
+                const response = await fetch(`/api/libros/${bookId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('responseMessage').textContent = `Libro con ID ${bookId} eliminado correctamente.`;
+                    document.getElementById('responseMessage').style.color = 'green';
+                } else {
+                    document.getElementById('responseMessage').textContent = `Error: ${data.error}`;
+                    document.getElementById('responseMessage').style.color = 'red';
+                }
+            } catch (error) {
+                document.getElementById('responseMessage').textContent = 'Error al conectar con el servidor.';
+                document.getElementById('responseMessage').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>

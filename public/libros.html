@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libros Disponibles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header><h1>Libros</h1></header>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Género</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-libros"></tbody>
+    </table>
+
+    <script>
+        const cargarLibros = async () => {
+            try {
+                const response = await fetch('/api/libros');
+                const libros = await response.json();
+
+                const tabla = document.getElementById('tabla-libros');
+                tabla.innerHTML = '';
+
+                libros.forEach(libro => {
+                    const fila = `
+                        <tr>
+                            <td>${libro.id}</td>
+                            <td>${libro.titulo}</td>
+                            <td>${libro.autor}</td>
+                            <td>${libro.genero || '-'}</td>
+                            <td>${libro.estado}</td>
+                        </tr>
+                    `;
+                    tabla.innerHTML += fila;
+                });
+            } catch (err) {
+                alert('Error al cargar los libros: ' + err.message);
+            }
+        };
+
+        cargarLibros();
+    </script>
+</body>
+</html>

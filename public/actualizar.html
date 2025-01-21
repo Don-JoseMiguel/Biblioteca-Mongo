@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Estado del Libro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header><h1>Actualizar Estado</h1></header>
+    <form id="form-actualizar">
+        <label for="id">ID del Libro:</label>
+        <input type="text" id="id" name="id" required><br><br>
+
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado">
+            <option value="disponible">Disponible</option>
+            <option value="reservado">Reservado</option>
+        </select><br><br>
+
+        <button type="submit">Actualizar Estado</button>
+    </form>
+
+    <script>
+        document.getElementById('form-actualizar').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = document.getElementById('id').value;
+            const data = {
+                estado: document.getElementById('estado').value
+            };
+
+            try {
+                const response = await fetch(`/api/libros/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Estado del libro actualizado');
+                    document.getElementById('form-actualizar').reset();
+                } else {
+                    const error = await response.json();
+                    alert('Error al actualizar el estado: ' + (error.message || 'Desconocido'));
+                }
+            } catch (err) {
+                alert('Error al actualizar el estado: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>
